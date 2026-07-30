@@ -18,6 +18,10 @@ const unsigned int FONTSET_SIZE = 80;
         const unsigned int FONT_SET_START_ADDR = 0x50;
         uint16_t opcode;
         uint16_t index{};
+        	uint8_t soundTimer{};
+        uint8_t delayTimer{};
+    const unsigned int  VIDEO_WIDTH = 64;
+    const unsigned int VIDEO_HEIGHT = 32;
 
 
 uint8_t fontset[FONTSET_SIZE] =
@@ -67,6 +71,12 @@ class Chip8{
         void OP_Annn();
         void OP_Bnnn();
         void OP_Cxkk();
+        void OP_Dxyn();
+        void OP_Ex9E();
+        void OP_ExA1();
+        void OP_Fx07();
+        void OP_Fx15();
+        void OP_Fx18();
 };
 
 void Chip8::LoadROM(char const* filename){
@@ -263,4 +273,65 @@ void Chip8::OP_Cxkk(){
 	uint8_t byte = opcode & 0x00FFu;
 
 	registers[Vx] = randByte(randGen) & byte;
+}
+void  Chip8::OP_Dxyn(){
+    //so this is the display insttruction, CHIP-8 displays based on sprite, a sprite in CHIP8 is always 8 pixels wide an 1-15 pixels of hight, they start with the memory locaition (Vx, Vy), 
+    //we iterate through the sprite and then XOR it with the pixel values of teh screen if the pixel is XOR'd is 1 then there it is a collision matrix, to enable collision we use VF = 1
+    	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+	uint8_t Vy = (opcode & 0x00F0u) >> 4u;
+	uint8_t height = opcode & 0x000Fu;
+    //THIS piece of code is used to wrap the picles to the boundary 
+    uint8_t xPos = registers[Vx] % VIDEO_WIDTH;
+	uint8_t yPos = registers[Vy] % VIDEO_HEIGHT;
+    registers[0xF] = 0;
+    for(int i =0;i<height; ++i){
+        uint8_t sprite_byte = memory[index + i];
+        for(unsigned int j =0; j<8 ;++j){
+            uint8_t spritePixel = sprite_byte & (0x80u >> j);
+            uint32_t* screenPixel = &video[(yPos + i) * VIDEO_WIDTH + (xPos + j)];
+            if(screenPixel){
+                if(*screenPixel = 0xFFFFFFFF){
+                    registers[0xF] = 1;
+                }
+                *screenPixel ^= 0xFFFFFFFF;
+            }
+        }
+    }
+}
+
+void Chip8::OP_Ex9E(){
+    //this depends on the Keypad mate 
+}
+
+void Chip8::OP_ExA1()
+{
+	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+
+	uint8_t key = registers[Vx];
+
+	if (!keypad[key])
+	{
+		pc += 2;
+	}
+}
+
+void Chip8::OP_Fx07()
+{
+	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+
+	registers[Vx] = delayTimer;
+}
+
+void Chip8::OP_Fx15()
+{
+	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+
+	delayTimer = registers[Vx];
+}
+
+void Chip8::OP_Fx18()
+{
+	uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+
+	soundTimer = registers[Vx];
 }
