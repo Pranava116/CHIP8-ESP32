@@ -3,3 +3,13 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+# Desktop Build Artifacts & Executables
+*.exe
+*.dll
+*.log
+log.txt
+# Vendor Libraries & Downloads
+SDL2/
+SDL2_temp/
+*.zip
+roms/

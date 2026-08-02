@@ -24,7 +24,7 @@ static uint8_t fontset[FONTSET_SIZE] =
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-void Chip8::LoadROM(const char* filename) {
+bool Chip8::LoadROM(const char* filename) {
     ifstream ROM_file;
     ROM_file.open(filename, ios::binary | ios::ate);
     if (ROM_file.is_open()) {
@@ -37,7 +37,9 @@ void Chip8::LoadROM(const char* filename) {
             memory[START_ADDR + i] = static_cast<uint8_t>(buff[i]);
         }
         delete[] buff;
+        return true;
     }
+    return false;
 }
 
 Chip8::Chip8()
@@ -288,7 +290,7 @@ void Chip8::OP_Dxyn() {
         uint8_t spriteByte = memory[index + row];
 
         for (unsigned int col = 0; col < 8; ++col) {
-            if (xPos + col >= VIDEO_WIDTH) break;
+            if (xPos + col >= VIDEO_WIDTH) continue;
             uint8_t spritePixel = spriteByte & (0x80u >> col);
 
             if (spritePixel) {

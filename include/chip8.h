@@ -31,7 +31,7 @@ public:
     std::uniform_int_distribution<uint8_t> randByte;
 
     Chip8();
-    void LoadROM(const char* filename);
+    bool LoadROM(const char* filename);
 
     void Table0();
     void Table8();
