@@ -8,9 +8,33 @@ TFT_eSPI tft = TFT_eSPI();
 void setup() {
     tft.init();
     tft.setRotation(1);
+    //other init functions like intializing the cycle and also upscaling the chip8 resolution to match the tft resolution
 }               
 
-void loop() {}
+void loop() {
+    
+    //take input here mate 
+        // auto currentTime = std::chrono::high_resolution_clock::now();
+        // float dt = std::chrono::duration<float, std::chrono::milliseconds::period>(currentTime - lastCycleTime).count();
+        
+        // if (dt >= cycleDelay) {
+        //     lastCycleTime = currentTime;
+
+        //     for (int i = 0; i < cyclesPerFrame; ++i) {
+        //         chip8.Cycle();
+        //     }
+
+        //     for (size_t i = 0; i < Chip8::VIDEO_WIDTH * Chip8::VIDEO_HEIGHT; ++i) {
+        //         uint32_t pixel = chip8.video[i];
+        //         pixels[i] = (pixel != 0) ? 0x00FF66FF : 0x121420FF;
+        //     }
+
+        //     SDL_UpdateTexture(texture, nullptr, pixels, Chip8::VIDEO_WIDTH * sizeof(uint32_t));
+        //     SDL_RenderClear(renderer);
+        //     SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+        //     SDL_RenderPresent(renderer);
+        // }
+}
 
 #else // Native Desktop / SDL2 Mode
 
@@ -183,4 +207,4 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-#endif
+#endif
