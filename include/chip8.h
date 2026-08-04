@@ -32,6 +32,7 @@ public:
 
     Chip8();
     bool LoadROM(const char* filename);
+    bool LoadROMFromBuffer(const uint8_t* buffer, size_t size);
 
     void Table0();
     void Table8();
