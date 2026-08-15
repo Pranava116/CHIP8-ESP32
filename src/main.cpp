@@ -5,7 +5,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_ILI9341.h>
 #include "chip8.h"
-
+#include "menu.h"
 // ===== TFT PINS =====
 #define TFT_CS   5
 #define TFT_DC   2
@@ -158,6 +158,10 @@ void setup() {
   } else {
     Serial.println("Failed to load ROM!");
   }
+
+  if (currentState == STATE_MENU) {
+    drawMenu();
+  }
 }
 
 unsigned long lastFrameTime = 0;
@@ -165,21 +169,26 @@ const int cyclesPerFrame = 10;
 const int frameDelayMs = 16; // ~60 FPS target
 
 void loop() {
-  unsigned long currentTime = millis();
+  if (currentState == STATE_MENU) {
+    // Menu is displayed on screen.
+    // Navigation/button controls are disabled for now per user request.
+  } else if (currentState == STATE_RUNNING) {
+    unsigned long currentTime = millis();
 
-  if (currentTime - lastFrameTime >= frameDelayMs) {
-    lastFrameTime = currentTime;
+    if (currentTime - lastFrameTime >= frameDelayMs) {
+      lastFrameTime = currentTime;
 
-    // Process matrix keypad inputs
-    updateKeypad();
+      // Process matrix keypad inputs
+      updateKeypad();
 
-    // Run CPU cycles for current frame
-    for (int i = 0; i < cyclesPerFrame; ++i) {
-      chip8.Cycle();
+      // Run CPU cycles for current frame
+      for (int i = 0; i < cyclesPerFrame; ++i) {
+        chip8.Cycle();
+      }
+
+      // Render frame to ILI9341 display
+      renderDisplay();
     }
-
-    // Render frame to ILI9341 display
-    renderDisplay();
   }
 
   // Feed Task Watchdog Timer & yield to FreeRTOS
