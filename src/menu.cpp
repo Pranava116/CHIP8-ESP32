@@ -79,3 +79,7 @@ void updateMenu() {
     }
   }
 }
+
+void click_menu(){
+
+}
