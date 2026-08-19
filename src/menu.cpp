@@ -10,7 +10,6 @@ const char *menuItems[] = {
     "Menu",
     "Tetris",
     "Pong",
-    "IBM",
 };
 
 int menuindex = 0;
@@ -50,7 +49,7 @@ void drawMenu() {
   drawMenuItems();
 }
 
-void updateMenu() {
+char updateMenu() {
   char key = keypad.getKey();
   if (key) {
     int prevIndex = menuindex;
@@ -67,19 +66,14 @@ void updateMenu() {
     } else if (key == '#' || key == 'D' || key == '5' || key == '*') {
       Serial.print("Selected option: ");
       Serial.println(menuItems[menuindex]);
-
       currentState = STATE_RUNNING;
       tft.fillScreen(ILI9341_BLACK);
-      return;
+      return menuItems[menuindex];
     }
 
-    // Only redraw the menu items if index changed (avoids flickering)
     if (menuindex != prevIndex) {
       drawMenuItems();
     }
   }
 }
 
-void click_menu(){
-
-}

@@ -173,12 +173,6 @@ void setup() {
 
   memset(prevVideo, 0, sizeof(prevVideo));
 
-  if (chip8.LoadROMFromBuffer(default_rom, sizeof(default_rom))) {
-    Serial.println("Tetris ROM loaded successfully!");
-  } else {
-    Serial.println("Failed to load ROM!");
-  }
-
   if (currentState == STATE_MENU) {
     drawMenu();
   }
@@ -190,7 +184,22 @@ const int frameDelayMs = 16;
 
 void loop() {
   if (currentState == STATE_MENU) {
-    updateMenu();
+    char res = updateMenu();
+    if(res == "Pong"){
+        if (chip8.LoadROMFromBuffer(default_rom, sizeof(default_rom))) {
+              Serial.println("Pong ROM loaded successfully!");
+         } else {
+              Serial.println("Failed to load ROM!");
+         }
+    }
+    if( res == "Tetris"){
+// change this code add a new room for tetris and pong 
+  if (chip8.LoadROMFromBuffer(default_rom, sizeof(default_rom))) {
+    Serial.println("Tetris ROM loaded successfully!");
+  } else {
+    Serial.println("Failed to load ROM!");
+  }
+    }
   } else if (currentState == STATE_RUNNING) {
     unsigned long currentTime = millis();
 
