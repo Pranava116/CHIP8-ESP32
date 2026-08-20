@@ -49,7 +49,7 @@ void drawMenu() {
   drawMenuItems();
 }
 
-char updateMenu() {
+int updateMenu() {
   char key = keypad.getKey();
   if (key) {
     int prevIndex = menuindex;
@@ -68,12 +68,13 @@ char updateMenu() {
       Serial.println(menuItems[menuindex]);
       currentState = STATE_RUNNING;
       tft.fillScreen(ILI9341_BLACK);
-      return menuItems[menuindex];
+      return menuindex;
     }
 
     if (menuindex != prevIndex) {
       drawMenuItems();
     }
   }
+  return -1;
 }
 

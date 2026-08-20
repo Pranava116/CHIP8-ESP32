@@ -185,14 +185,14 @@ const int frameDelayMs = 16;
 void loop() {
   if (currentState == STATE_MENU) {
     char res = updateMenu();
-    if(res == "Pong"){
+    if(res == 1){
         if (chip8.LoadROMFromBuffer(default_rom, sizeof(default_rom))) {
               Serial.println("Pong ROM loaded successfully!");
          } else {
               Serial.println("Failed to load ROM!");
          }
     }
-    if( res == "Tetris"){
+    if( res == 2){
 // change this code add a new room for tetris and pong 
   if (chip8.LoadROMFromBuffer(default_rom, sizeof(default_rom))) {
     Serial.println("Tetris ROM loaded successfully!");
